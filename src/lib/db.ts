@@ -12,4 +12,15 @@ db.exec(`
 	)
 `);
 
+const deleteOld = db.prepare(
+  "DELETE FROM photos WHERE created_at < datetime('now', '-24 hours')",
+);
+
+function cleanup() {
+  deleteOld.run();
+}
+
+cleanup();
+setInterval(cleanup, 60 * 60 * 1000);
+
 export default db;
